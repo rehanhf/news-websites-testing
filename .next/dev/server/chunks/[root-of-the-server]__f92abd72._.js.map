@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/hafiz/Documents/Kuliah/web-project/proxy.ts"],"sourcesContent":["import { NextResponse } from \"next/server\"\nimport type { NextRequest } from \"next/server\"\n\nexport async function proxy(request: NextRequest) {\n  // Dashboard protection - check for authToken\n  if (request.nextUrl.pathname.startsWith(\"/dashboard\")) {\n    const authToken = request.cookies.get(\"authToken\")?.value\n\n    // If no token in cookies, redirect to login\n    if (!authToken) {\n      return NextResponse.redirect(new URL(\"/login\", request.url))\n    }\n  }\n\n  return NextResponse.next()\n}\n\nexport const config = {\n  matcher: [\"/dashboard/:path*\"],\n}\n"],"names":[],"mappings":";;;;;;AAAA;;AAGO,eAAe,MAAM,OAAoB;IAC9C,6CAA6C;IAC7C,IAAI,QAAQ,OAAO,CAAC,QAAQ,CAAC,UAAU,CAAC,eAAe;QACrD,MAAM,YAAY,QAAQ,OAAO,CAAC,GAAG,CAAC,cAAc;QAEpD,4CAA4C;QAC5C,IAAI,CAAC,WAAW;YACd,OAAO,uPAAY,CAAC,QAAQ,CAAC,IAAI,IAAI,UAAU,QAAQ,GAAG;QAC5D;IACF;IAEA,OAAO,uPAAY,CAAC,IAAI;AAC1B;AAEO,MAAM,SAAS;IACpB,SAAS;QAAC;KAAoB;AAChC"}}]
-}
