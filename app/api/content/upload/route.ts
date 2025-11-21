@@ -28,12 +28,7 @@ export async function POST(request: Request) {
     const tags = generateTags(title, content)
 
     // Create slug from title
-    const slug = title
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
+    const slug = slugify(formData.title)
 
     // TODO: Save to database
     const newContent = {
