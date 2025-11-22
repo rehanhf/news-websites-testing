@@ -27,7 +27,7 @@ export default async function CategoriesPage() {
                 className="group p-6 border border-border rounded hover:bg-border transition-colors"
               >
                 <h2 className="text-2xl font-bold group-hover:underline">{category.name}</h2>
-                <p className="text-sm text-muted mt-2">Browse articles in this category</p>
+                <p className="text-sm text-muted-foreground mt-2">Browse articles in this category</p>
               </Link>
             ))}
           </div>
