@@ -50,24 +50,24 @@ export default async function ContentPage({ params }: PageProps) {
         <article className="mx-auto max-w-3xl px-6 py-24">
           <div className="mb-12">
             <div className="flex items-center gap-3 mb-6">
-              <span className="text-xs text-muted uppercase tracking-wide">
+              <span className="text-xs text-muted-foreground uppercase tracking-wide">
                 {new Date(content.createdAt).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
                 })}
               </span>
-              <span className="text-xs text-muted uppercase tracking-wide">•</span>
-              <span className="text-xs text-muted uppercase tracking-wide">{content.category}</span>
+              <span className="text-xs text-muted-foreground uppercase tracking-wide">•</span>
+              <span className="text-xs text-muted-foreground uppercase tracking-wide">{content.category}</span>
             </div>
 
             <h1 className="text-5xl font-bold mb-6 text-balance">{content.title}</h1>
 
-            <p className="text-xl text-muted leading-relaxed mb-8">{content.excerpt}</p>
+            <p className="text-xl text-muted-foreground leading-relaxed mb-8">{content.excerpt}</p>
 
             <div className="flex flex-wrap gap-2">
               {content.tags.map((tag) => (
-                <span key={tag} className="text-xs px-3 py-1 bg-border rounded text-muted">
+                <span key={tag} className="text-xs px-3 py-1 bg-border rounded text-muted-foreground">
                   {tag}
                 </span>
               ))}
@@ -78,7 +78,7 @@ export default async function ContentPage({ params }: PageProps) {
             <div className="flex items-center gap-4">
               <div>
                 <p className="font-semibold">{content.author.name}</p>
-                <p className="text-sm text-muted">{content.author.email}</p>
+                <p className="text-sm text-muted-foreground">{content.author.email}</p>
               </div>
             </div>
           </div>
