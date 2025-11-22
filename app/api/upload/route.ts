@@ -4,7 +4,7 @@ import { NextResponse } from "next/server"
 export async function POST(request: Request) {
   try {
     const formData = await request.formData()
-    const file = formData.get("file") as File
+    const file = await formData.get("file") as File
 
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 })
@@ -12,6 +12,7 @@ export async function POST(request: Request) {
 
     console.log("[v0] Uploading file to Vercel Blob:", file.name)
 
+    
     const blob = await put(file.name, file, {
       access: "public",
     })
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       url: blob.url,
-      size: blob.size,
+      size: file.size,
     })
   } catch (error) {
     console.error("[v0] Upload error:", error)

@@ -10,8 +10,9 @@ import { auth, db } from "@/lib/firebase"
 import { signOut } from "firebase/auth"
 import { collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc, Timestamp } from "firebase/firestore"
 import type { Content } from "@/lib/types"
-import slugify from "@/lib/slugify"
+import {slugify} from "@/lib/slugify"
 import { Trash2, Edit2, Plus } from "lucide-react"
+import { buildContent } from "@/lib/buildContent"
 
 export default function DashboardContent() {
   const router = useRouter()
@@ -34,6 +35,7 @@ export default function DashboardContent() {
     tags: "",
     thumbnail: "",
     galleryImages: [] as string[],
+    type: "article",
   })
   const [uploadProgress, setUploadProgress] = useState(0)
 
@@ -157,14 +159,15 @@ export default function DashboardContent() {
       if (!user) throw new Error("User not authenticated")
       if (!formData.author.trim()) throw new Error("Author name is required")
 
-      const slug = formData.title
-        .toLowerCase()
-        .trim()
-        .replace(/[^\w\s-]/g, "")
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-")
-        .slice(0, 120)
-      const contentData = {
+        const slug = formData.title
+          .toLowerCase()
+          .trim()
+          .replace(/[^\w\s-]/g, "")
+          .replace(/\s+/g, "-")
+          .replace(/-+/g, "-")
+          .slice(0, 120)
+        const contentType = formData.type as "article" | "multimedia";
+        const contentData = {
         title: formData.title,
         slug,
         excerpt: formData.excerpt,
@@ -176,7 +179,7 @@ export default function DashboardContent() {
           .filter(Boolean),
         thumbnail: formData.thumbnail,
         galleryImages: formData.galleryImages,
-        type: "article",
+        type: contentType,
         published: true,
         author: {
           id: user.uid,
@@ -189,12 +192,23 @@ export default function DashboardContent() {
 
       if (editingId) {
         await updateDoc(doc(db, "content", editingId), contentData)
-        setArticles(articles.map((a) => (a.id === editingId ? { ...a, ...contentData } : a)))
+        setArticles(
+  articles.map((a) =>
+    a.id === editingId
+      ? buildContent(a.id, contentData, user, a)
+      : a
+  )
+)
+
         console.log("[v0] Article updated")
       } else {
-        contentData.createdAt = Timestamp.now()
-        const docRef = await addDoc(collection(db, "content"), contentData)
-        setArticles([{ id: docRef.id, ...contentData, createdAt: new Date() }, ...articles])
+        const newContentData = {
+          ...contentData,
+          createdAt: Timestamp.now(),
+        }
+        const docRef = await addDoc(collection(db, "content"), newContentData)
+        const newArticle = buildContent(docRef.id, contentData, user)
+        setArticles([newArticle, ...articles])
         console.log("[v0] Article published")
       }
 
@@ -207,6 +221,7 @@ export default function DashboardContent() {
         tags: "",
         thumbnail: "",
         galleryImages: [],
+        type: "article",
       })
       setEditingId(null)
       alert(editingId ? "Article updated successfully!" : "Article published successfully!")
@@ -240,6 +255,7 @@ export default function DashboardContent() {
       tags: article.tags.join(", "),
       thumbnail: article.thumbnail || "",
       galleryImages: article.galleryImages || [],
+      type: "article"
     })
     setEditingId(article.id)
     setActiveTab("upload")
@@ -318,6 +334,7 @@ export default function DashboardContent() {
               tags: "",
               thumbnail: "",
               galleryImages: [],
+              type: "article"
             })
           }}
           className={`pb-4 font-semibold transition-colors flex items-center gap-2 ${
@@ -584,6 +601,7 @@ export default function DashboardContent() {
                       tags: "",
                       thumbnail: "",
                       galleryImages: [],
+                      type:"article"
                     })
                   }}
                   className="px-6 py-2 border border-border rounded hover:bg-border transition-colors"

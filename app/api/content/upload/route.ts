@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import slugify from "@/lib/slugify"
+import {slugify} from "@/lib/slugify"
 import { getSession } from '@/lib/auth'
 import { generateTags } from '@/lib/tag-generator'
 
@@ -29,7 +29,9 @@ export async function POST(request: Request) {
     const tags = generateTags(title, content)
 
     // Create slug from title
-    const slug = slugify(formData.title)
+    const body = await request.json()
+    const slug = slugify(body.title)
+
 
     // TODO: Save to database
     const newContent = {
