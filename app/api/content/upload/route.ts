@@ -29,7 +29,8 @@ export async function POST(request: Request) {
     const tags = generateTags(title, content)
 
     // Create slug from title
-    const slug = slugify(title)
+    const slug = slugify(formData.title)
+
     // TODO: Save to database
     const newContent = {
       id: String(Date.now()),

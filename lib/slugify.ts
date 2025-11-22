@@ -1,18 +1,9 @@
-// lib/slugify.ts
-export default function slugify(title: string, maxLength = 120) {
-  if (!title) return ""
+export function slugify(title: string) {
   return title
-    .toString()
     .toLowerCase()
     .trim()
-    // remove punctuation (keeps letters, numbers, spaces, and hyphen)
-    .replace(/[^\w\s-]/g, "")
-    // convert whitespace to single hyphen
+    .replace(/[^\w\s-]/g, "") // remove punctuation including :
     .replace(/\s+/g, "-")
-    // collapse repeated hyphens
     .replace(/-+/g, "-")
-    // trim hyphens from ends
-    .replace(/^-+|-+$/g, "")
-    // limit length (don't cut mid-word if possible, but we keep simple slice)
-    .slice(0, maxLength)
+    .slice(0, 120)            // keep but not too short
 }
