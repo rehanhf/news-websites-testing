@@ -1,6 +1,8 @@
 "use client"
 
 import type React from "react"
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
@@ -8,6 +10,7 @@ import { auth, db } from "@/lib/firebase"
 import { signOut } from "firebase/auth"
 import { collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc, Timestamp } from "firebase/firestore"
 import type { Content } from "@/lib/types"
+import slugify from "@/lib/slugify"
 import { Trash2, Edit2, Plus } from "lucide-react"
 
 export default function DashboardContent() {
@@ -154,7 +157,13 @@ export default function DashboardContent() {
       if (!user) throw new Error("User not authenticated")
       if (!formData.author.trim()) throw new Error("Author name is required")
 
-      const slug = formData.title.toLowerCase().replace(/\s+/g, "-").slice(0, 50)
+      const slug = formData.title
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .slice(0, 120)
       const contentData = {
         title: formData.title,
         slug,

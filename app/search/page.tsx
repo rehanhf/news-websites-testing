@@ -6,6 +6,7 @@ import Header from '@/components/header'
 import Footer from '@/components/footer'
 import ContentGrid from '@/components/content-grid'
 import { Content } from '@/lib/types'
+export const dynamic = "force-dynamic"
 
 function SearchContent() {
   const searchParams = useSearchParams()

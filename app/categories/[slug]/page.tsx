@@ -4,6 +4,7 @@ import Header from '@/components/header'
 import Footer from '@/components/footer'
 import ContentGrid from '@/components/content-grid'
 import { getContentByCategory, getAllCategories } from '@/lib/db-firebase'
+export const dynamic = "force-dynamic"
 
 interface PageProps {
   params: Promise<{

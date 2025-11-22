@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { getLatestContent } from "@/lib/db"
+export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
   title: "Archive - TAJAM",

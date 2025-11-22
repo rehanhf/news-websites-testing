@@ -4,6 +4,7 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { getContentBySlug } from "@/lib/db"
 import ImageCarousel from "@/components/image-carousel"
+export const dynamic = "force-dynamic"
 
 interface PageProps {
   params: Promise<{

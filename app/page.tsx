@@ -3,6 +3,7 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ContentGrid from "@/components/content-grid"
 import { getLatestContent } from "@/lib/db-firebase"
+export const dynamic = "force-dynamic"
 
 export const metadata = {
   title: "TAJAM - To the Point",

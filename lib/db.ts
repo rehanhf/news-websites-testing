@@ -35,21 +35,43 @@ export async function getLatestContent(limitNum = 10): Promise<Content[]> {
 
 export async function getContentBySlug(slug: string): Promise<Content | null> {
   try {
-    const q = query(collection(db, "content"), where("slug", "==", slug))
-    const querySnapshot = await getDocs(q)
-    if (querySnapshot.empty) return null
-    const doc = querySnapshot.docs[0]
+    // First attempt: direct match
+    let q = query(collection(db, "content"), where("slug", "==", slug))
+    let snapshot = await getDocs(q)
+
+    // If no match, try lowercase version
+    if (snapshot.empty) {
+      q = query(collection(db, "content"), where("slug", "==", slug.toLowerCase()))
+      snapshot = await getDocs(q)
+    }
+
+    // If still empty, try removing punctuation
+    if (snapshot.empty) {
+      const cleaned = slug.replace(/[^\w\s-]/g, '')
+      q = query(collection(db, "content"), where("slug", "==", cleaned))
+      snapshot = await getDocs(q)
+    }
+
+    if (snapshot.empty) {
+      console.warn("Slug lookup failed:", slug)
+      return null
+    }
+
+    const docSnap = snapshot.docs[0]
+
     return {
-      id: doc.id,
-      ...doc.data(),
-      createdAt: doc.data().createdAt?.toDate() || new Date(),
-      updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+      id: docSnap.id,
+      ...docSnap.data(),
+      createdAt: docSnap.data().createdAt?.toDate() || new Date(),
+      updatedAt: docSnap.data().updatedAt?.toDate() || new Date(),
     } as Content
+
   } catch (error) {
     console.error("Error fetching content by slug:", error)
     return null
   }
 }
+
 
 export async function getContentByCategory(category: string): Promise<Content[]> {
   try {
