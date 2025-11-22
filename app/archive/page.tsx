@@ -31,12 +31,12 @@ export default async function ArchivePage() {
           <h1 className="text-5xl font-bold mb-16 text-balance">Archive</h1>
 
           {sortedYears.length === 0 ? (
-            <p className="text-muted">No content yet.</p>
+            <p className="text-muted-foreground">No content yet.</p>
           ) : (
             <div className="space-y-12">
               {sortedYears.map(([year, items]) => (
                 <div key={year}>
-                  <h2 className="text-2xl font-bold mb-6 text-muted">{year}</h2>
+                  <h2 className="text-2xl font-bold mb-6 text-muted-foreground">{year}</h2>
                   <ul className="space-y-4">
                     {items.map((item) => (
                       <li key={item.id} className="border-b border-border pb-4 last:border-b-0">
@@ -47,9 +47,9 @@ export default async function ArchivePage() {
                           <div className="flex justify-between items-start gap-4">
                             <div className="flex-grow min-w-0">
                               <h3 className="font-bold mb-1 group-hover:underline line-clamp-2">{item.title}</h3>
-                              <p className="text-sm text-muted">{item.category}</p>
+                              <p className="text-sm text-muted-foreground">{item.category}</p>
                             </div>
-                            <time className="text-sm text-muted flex-shrink-0">
+                            <time className="text-sm text-muted-foreground flex-shrink-0">
                               {new Date(item.createdAt).toLocaleDateString("en-US", {
                                 month: "short",
                                 day: "numeric",
